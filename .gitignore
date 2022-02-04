@@ -1,3 +1,19 @@
+# Folders and artifacts created by notebook
+AdaBins/
+backup/
+CLIP/
+GMA/
+images_out/
+logs/
+pretrained/
+pytti/
+pytti-core/
+taming-transformers/
+videos/
+sflckr.*
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
