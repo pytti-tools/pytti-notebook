@@ -1,0 +1,22 @@
+# @package _global_
+scenes: deep space habitation ring made of glass | galactic nebula | wow! space is
+  full of fractal creatures darting around everywhere like fireflies
+scene_prefix: 'astrophotography #pixelart | image credit nasa | space full of cybernetic
+  neon:3_galactic nebula | isometric pixelart by Sachin Teng | '
+scene_suffix: '| satellite image:-1:-.95 | text:-1:-.95 | anime:-1:-.95 | watermark:-1:-.95
+  | backyard telescope:-1:-.95 | map:-1:-.95'
+
+direct_image_prompts: https://i.imgur.com/frXoHJ6.jpg
+
+image_model: Limited Palette
+ViTB32: true
+
+animation_mode: 3D
+translate_x: '-1700*sin(radians(1.5))'
+translate_y: '0'
+translate_z_3d: '(50+10*t)*sin(t/10*pi)**2'
+rotate_3d: '[cos(radians(1.5)), 0, -sin(radians(1.5))/sqrt(2), sin(radians(1.5))/sqrt(2)]'
+lock_camera: true
+
+file_namespace: default
+seed: -4854551145582748953

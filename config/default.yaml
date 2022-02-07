@@ -1,0 +1,137 @@
+# Use VISSL config system as a model of hydra/omegaconf best practices
+#  - https://github.com/facebookresearch/vissl/blob/main/vissl/config/defaults.yaml
+#  - https://vissl.readthedocs.io/en/latest/hydra_config.html
+
+defaults:
+  - _self_
+  - conf: ???
+#  - conf: demo
+
+#############
+## Prompts ##
+#############
+
+scenes: ???
+scene_prefix: ''
+scene_suffix: ''
+
+direct_image_prompts: ''
+init_image: ''
+direct_init_weight: ''
+semantic_init_weight: ''
+
+##################################
+
+image_model: Limited Palette
+vqgan_model: sflckr
+animation_mode: 3D
+
+##################################
+
+width: 180
+height: 112
+
+steps_per_scene: 100
+steps_per_frame: 50
+interpolation_steps: 0
+
+learning_rate: null
+reset_lr_each_frame: true
+seed: ${now:%f} # microsecond component of timestamp. Basically random.
+cutouts: 40
+cut_pow: 2
+cutout_border: 0.25
+border_mode: clamp
+
+##################################
+
+##########
+# Camera #
+##########
+
+field_of_view: 60
+near_plane: 1
+far_plane: 10000
+
+######################
+### Induced Motion ###
+######################
+
+#  _2d and _3d only apply to those animation modes
+
+translate_x: '-1700*sin(radians(1.5))'
+translate_y: '0'
+translate_z_3d: '(50+10*t)*sin(t/10*pi)**2'
+rotate_3d: '[cos(radians(1.5)), 0, -sin(radians(1.5))/sqrt(2), sin(radians(1.5))/sqrt(2)]'
+rotate_2d: '5'
+zoom_x_2d: '0'
+zoom_y_2d: '0'
+
+sampling_mode: bicubic
+infill_mode: wrap
+pre_animation_steps: 100
+lock_camera: true
+
+##################################
+
+#######################
+### Limited Palette ###
+#######################
+
+pixel_size: 4
+smoothing_weight: 0.02
+random_initial_palette: false
+palette_size: 6
+palettes: 9
+gamma: 1
+hdr_weight: 0.01
+palette_normalization_weight: 0.2
+show_palette: false
+target_palette: ''
+lock_palette: false
+
+##############
+### ffmpeg ###
+##############
+
+frames_per_second: 12
+
+direct_stabilization_weight: ''
+semantic_stabilization_weight: ''
+depth_stabilization_weight: ''
+edge_stabilization_weight: ''
+flow_stabilization_weight: ''
+
+#####################################
+### animation_mode = Video Source ###
+#####################################
+
+video_path: ''
+frame_stride: 1
+reencode_each_frame: true
+flow_long_term_samples: 1
+
+############
+### CLIP ###
+############
+
+ViTB32: true
+ViTB16: false
+RN50: false
+RN50x4: false
+
+###############
+### Outputs ###
+###############
+
+file_namespace: default
+allow_overwrite: false
+display_every: 50
+clear_every: 0
+display_scale: 1
+save_every: 50
+
+backups: 5
+show_graphs: false
+approximate_vram_usage: false
+
