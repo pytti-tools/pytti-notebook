@@ -131,7 +131,7 @@ clear_every: 0
 display_scale: 1
 save_every: 50
 
-backups: 5
+backups: 0
 show_graphs: false
 approximate_vram_usage: false
 
