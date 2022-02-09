@@ -24,7 +24,7 @@ semantic_init_weight: ''
 
 image_model: Limited Palette
 vqgan_model: sflckr
-animation_mode: 3D
+animation_mode: off
 
 ##################################
 
@@ -59,10 +59,10 @@ far_plane: 10000
 
 #  _2d and _3d only apply to those animation modes
 
-translate_x: '-1700*sin(radians(1.5))'
+translate_x: '0'
 translate_y: '0'
-translate_z_3d: '(50+10*t)*sin(t/10*pi)**2'
-rotate_3d: '[cos(radians(1.5)), 0, -sin(radians(1.5))/sqrt(2), sin(radians(1.5))/sqrt(2)]'
+translate_z_3d: '0'
+rotate_3d: '[1, 0, 0, 0]'
 rotate_2d: '5'
 zoom_x_2d: '0'
 zoom_y_2d: '0'
