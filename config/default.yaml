@@ -56,6 +56,19 @@ scenes: ???
 scene_prefix: ''
 scene_suffix: ''
 
+# `direct_image_prompts:` paths or urls of images that you want your image to look like in a literal sense, 
+#                         along with `weight_mask` and `stop` values, separated by `|`.
+#                         Apply masks to direct image prompts with `path or url of image:weight_path 
+#                         or url of mask` For video masks it must be a path to an mp4 file.
+# `init_image:`           path or url of start image. Works well for creating a central focus.
+# `direct_init_weight:`   Defaults to $0$. Use the initial image as a direct image prompt.
+#                         Equivalent to adding `init_image:direct_init_weight` as a `direct_image_prompt`. 
+#                         Supports weights, masks, and stops.
+# `semantic_init_weight:` Defaults to $0$. Defaults to $0$. Use the initial image as a semantic image prompt. #                         Equivalent to adding `[init_image]:direct_init_weight` 
+#                         as a prompt to each scene in `scenes`. Supports weights, masks, and stops. 
+#                         **IMPORTANT** since this is a semantic prompt, you still need to put the mask
+#                         in brackets -- `[` `]` -- to denote it as a path or url, 
+#                         otherwise it will be read as text instead of a file.
 direct_image_prompts: ''
 init_image: ''
 direct_init_weight: ''
