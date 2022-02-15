@@ -10,6 +10,47 @@ defaults:
 #############
 ## Prompts ##
 #############
+#
+# `scenes:` Descriptions of scenes you want generated, separated by `||`. 
+#           Each scene can contain multiple prompts, separated by `|`.
+#           Weight prompts with `description:weight`. 
+#           Use "stop" prompts with `description:weight:stop`. 
+#
+#           ## MASKS
+#           Use `description:weight_mask description` with a text prompt as `mask`. 
+#           - The prompt will only be applied to areas of the image that match `mask description` according to CLIP.
+#           - The prompt will only be applied to the masked (white) areas of the mask image. 
+#           - Use `description:weight_[-mask]` to apply the prompt to the black areas instead.
+#           Use `description:weight_[mask]` with a URL or path to an image, or a path to a .mp4 video to use as a `mask`.
+#           Use `[path or url]` as a prompt to add a semantic image prompt. 
+#           - This will be read by CLIP and understood as a near perfect text description of the image.
+#
+# # # # # # #
+# Examples  #
+# # # # # # # 
+#
+# Sequence of 4 winter scenes, two text prompts each
+#   `Winter sunrise | icy landscape || Winter day | snowy skyline || Winter sunset | chilly air || Winter night | clear sky` 
+#
+# Attempt to draw a Martian landscape with a blue sky
+#   `blue sky:10|martian landscape|red sky:-1`
+#
+# Using "stop" weights to try to control overfitting to prompt extremes
+#   `Feathered dinosaurs|birds:1:0.87|scales:-1:-.9|text:-1:-.9`
+#
+# Using a weight mask to target the prompt "dragon" on regions that match "baby" 
+#  `Khaleesi Daenerys Targaryen | mother of dragons | dragon:3_baby`
+#
+# Using an image or video file as a weight mask
+#   `sunlight:3_[mask.mp4]|midnight:3_[-mask.mp4]`
+#
+# The same notation can be used to create semantic image prompts
+#  `[artist signature.png]:-1:-.95|[https://i.redd.it/ewpeykozy7e71.png]:3|fractal clouds|hole in the sky`
+#
+# ###########
+#
+# `scene_prefix:` text prepended to the beginning of each scene.
+# `scene_suffix:` text appended to the end of each scene.
 
 scenes: ???
 scene_prefix: ''
