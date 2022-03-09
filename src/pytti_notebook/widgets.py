@@ -21,12 +21,13 @@ from ipycanvas import (
   hold_canvas,
 )
 
+from functools import partial
 
 class Sketcher:
     def __init__(
         self,
         starting_color="#749cb8",
-        factory=MultiRoughCanvas
+        factory=partial(MultiRoughCanvas, 2)
     ):
         self.factory=factory
         self.starting_color=starting_color
