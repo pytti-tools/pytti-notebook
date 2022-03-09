@@ -10,9 +10,17 @@ Run the following in the notebook prior to using objects in this module:
 #https://github.com/martinRenou/ipycanvas/blob/master/examples/hand_drawing.ipynb
 
 from copy import deepcopy
+from functools import partial
 
 from IPython.display import display
-from ipywidgets import Image
+from ipycanvas import (
+  Canvas,
+  RoughCanvas, 
+  MultiRoughCanvas,
+  MultiCanvas,
+  hold_canvas,
+)
+from ipywidgets import Image as ImageIpyw
 from ipywidgets import (
     ColorPicker, 
     link, 
@@ -21,17 +29,8 @@ from ipywidgets import (
     Button,
 )
 
-from ipywidgets import Image as ImageIpyw
 
-from ipycanvas import (
-  Canvas,
-  RoughCanvas, 
-  MultiRoughCanvas,
-  MultiCanvas,
-  hold_canvas,
-)
-
-from functools import partial
+import numpy as np
 
 class Sketcher:
     """
@@ -85,7 +84,7 @@ class Sketcher:
             self.container.to_file("_mask_with_image.png")
             self.mask_canvas.to_file("_mask.png")
             with open("mask_data.npy", 'wb') as f:
-                self.mask_canvas.get_image_data().save(f)
+                np.save(f, self.mask_canvas.get_image_data())
         self.save_button.on_click(
             _on_clicked
             )
