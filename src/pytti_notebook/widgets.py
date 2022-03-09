@@ -9,9 +9,17 @@ Run the following in the notebook prior to using objects in this module:
 #https://github.com/martinRenou/ipycanvas/issues/170#issuecomment-1062071346
 #https://github.com/martinRenou/ipycanvas/blob/master/examples/hand_drawing.ipynb
 
+from copy import deepcopy
+
 from IPython.display import display
 from ipywidgets import Image
-from ipywidgets import ColorPicker, IntSlider, link, AppLayout, HBox
+from ipywidgets import (
+    ColorPicker, 
+    link, 
+    HBox, 
+    VBox,
+    Button,
+)
 
 from ipycanvas import (
   Canvas,
@@ -24,26 +32,42 @@ from ipycanvas import (
 from functools import partial
 
 class Sketcher:
+    """
+    Run the following in the notebook prior to using this widget in colab:
+
+        !pip install -q ipycanvas
+        from google.colab import output
+        output.enable_custom_widget_manager()
+    """
     def __init__(
         self,
         starting_color="#749cb8",
     ):
         self.starting_color=starting_color
+        self.reset()
+
+    def reset(self):
         self.init_canvas()
         self.init_picker()
+        self.init_reset_button()
         self.link()
 
     def link(self):
         picker, canvas = self.picker, self.mask_canvas
-        #picker, canvas = self.picker, self.container[1]
         link((picker, "value"), (canvas, "stroke_style"))
         link((picker, "value"), (canvas, "fill_style"))
+        self.reset_button.on_click(self.reset)
         return picker, canvas 
 
     def init_picker(self):
         self.picker = ColorPicker(
             description="Color:", 
             value=self.starting_color,
+        )
+
+    def init_reset_button(self):
+        self.reset_button = Button(
+            description="Reset"
         )
 
     @property
@@ -73,6 +97,7 @@ class Sketcher:
         self.drawing = False
         self.position = None
         self.shape = []
+        self.poly = []
         return self.container
 
     def set_background(self, im):
@@ -101,6 +126,7 @@ class Sketcher:
             self.mask_canvas.stroke_line(x1, y1, x0, y0)
             self.shape.append((x0, y0))             
             self.mask_canvas.fill_polygon(self.shape)
+        self.poly.append(deepcopy(self.shape))
         self.shape = []
         self.mask_canvas.save()
 
@@ -109,5 +135,9 @@ class Sketcher:
         self.mask_canvas.restore()
 
     def show(self):
-        display(HBox((self.container, self.picker)))
-        #display(self.container)
+        layout = HBox(
+            (self.container, 
+             VBox((self.picker,self.reset_button))
+            )
+        )
+        display(layout)
