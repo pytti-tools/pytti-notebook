@@ -21,6 +21,8 @@ from ipywidgets import (
     Button,
 )
 
+from ipywidgets import Image as ImageIpyw
+
 from ipycanvas import (
   Canvas,
   RoughCanvas, 
@@ -105,7 +107,27 @@ class Sketcher:
         return self.container
 
     def set_background(self, im):
+        if isinstance(im, str):
+            try:
+                self._set_background_from_fpath(self, fpath=im)
+            except FileNotFoundError:
+                self._set_background_from_url(self, url=im)
+        else:
+            raise NotImplementedError
+
+    def _set_background(self, im):
         self.bgnd_canvas.draw_image(im, 0,0)
+
+    def _set_background_from_fpath(self, fpath):
+        """sets background image given path to image file"""
+        im = ImageIpyw.from_file(fpath)
+        self._set_background(im)
+
+    def _set_background_from_url(self, url):
+        """sets background image given path to image file"""
+        im = ImageIpyw.from_url(url)
+        self._set_background(im)
+
 
     def on_mouse_down(self, x, y):
         self.drawing = True
