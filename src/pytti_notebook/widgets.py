@@ -122,9 +122,9 @@ class Sketcher:
     def set_background(self, im):
         if isinstance(im, str):
             try:
-                self._set_background_from_fpath(self, fpath=im)
+                self._set_background_from_fpath(fpath=im)
             except FileNotFoundError:
-                self._set_background_from_url(self, url=im)
+                self._set_background_from_url(url=im)
         else:
             raise NotImplementedError
 
