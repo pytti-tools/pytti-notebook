@@ -34,8 +34,8 @@ class Sketcher:
         self.link()
 
     def link(self):
-        #picker, canvas = self.picker, self.mask_canvas
-        picker, canvas = self.picker, self.container[1]
+        picker, canvas = self.picker, self.mask_canvas
+        #picker, canvas = self.picker, self.container[1]
         link((picker, "value"), (canvas, "stroke_style"))
         link((picker, "value"), (canvas, "fill_style"))
         return picker, canvas 
@@ -46,13 +46,13 @@ class Sketcher:
             value=self.starting_color,
         )
 
-    #@property
-    #def mask_canvas(self): 
-    #    return self.container[0]
+    @property
+    def mask_canvas(self): 
+        return self.container[1]
 
-    #@property
-    #def bgnd_canvas(self): 
-    #    return self.container[1]
+    @property
+    def bgnd_canvas(self): 
+        return self.container[0]
 
     def init_canvas(
         self,
@@ -63,19 +63,12 @@ class Sketcher:
         self.height = height 
         self.container = MultiCanvas(2, width=width, height=height, sync_image_data=True)
 
-        #canvas = self.mask_canvas
-        #canvas.sync_image_data=True
-        #canvas.on_mouse_down(self.on_mouse_down)
-        #canvas.on_mouse_move(self.on_mouse_move)
-        #canvas.on_mouse_up(self.on_mouse_up)
-        #canvas.stroke_style = self.starting_color # can I just link the picker here?
-
-        #self.container[1] = self.mask_canvas
-        self.container[1].sync_image_data=True
-        self.container[1].on_mouse_down(self.on_mouse_down)
-        self.container[1].on_mouse_move(self.on_mouse_move)
-        self.container[1].on_mouse_up(self.on_mouse_up)
-        self.container[1].stroke_style = self.starting_color # can I just link the picker here?
+        self.mask_canvas.sync_image_data=True
+        self.mask_canvas.on_mouse_down(self.on_mouse_down)
+        self.mask_canvas.on_mouse_move(self.on_mouse_move)
+        self.mask_canvas.on_mouse_up(self.on_mouse_up)
+        self.mask_canvas.stroke_style = self.starting_color # can I just link the picker here?
+        self.mask_canvas.fill_style = self.starting_color # can I just link the picker here?
 
         self.drawing = False
         self.position = None
@@ -83,7 +76,7 @@ class Sketcher:
         return self.container
 
     def set_background(self, im):
-        self.container[0].draw_image(im, 0,0)
+        self.bgnd_canvas.draw_image(im, 0,0)
 
     def on_mouse_down(self, x, y):
         self.drawing = True
@@ -93,25 +86,28 @@ class Sketcher:
     def on_mouse_move(self, x1, y1):
         if not self.drawing:
             return
-        #with hold_canvas(self.mask_canvas):
         with hold_canvas(self.container):
             x0, y0 = self.position
-            #self.mask_canvas.stroke_line(x0, y0, x1, y1)
-            self.container[1].stroke_line(x0, y0, x1, y1)
+            self.mask_canvas.stroke_line(x0, y0, x1, y1)
             self.position = (x1, y1)
         self.shape.append(self.position)
 
     def on_mouse_up(self, x1, y1):
         self.drawing = False
-        #with hold_canvas(self.mask_canvas):
         with hold_canvas(self.container):
-            x0, y0 = self.position
-            #self.mask_canvas.stroke_line(x0, y0, x1, y1)
-            #self.mask_canvas.fill_polygon(self.shape)
-            self.container[0].stroke_line(x0, y0, x1, y1)
-            self.container[0].fill_polygon(self.shape)
+            x_previous, y_previous = self.position
+            x0, y0 = self.shape[0]
+            self.mask_canvas.stroke_line(x_previous, y_previous, x1, y1)
+            self.mask_canvas.stroke_line(x1, y1, x0, y0)
+            self.shape.append((x0, y0))             
+            self.mask_canvas.fill_polygon(self.shape)
         self.shape = []
+        self.mask_canvas.save()
+
+    def undo(self):
+        # yeah.... this doesn't work.
+        self.mask_canvas.restore()
 
     def show(self):
-        #display(HBox((self.container, self.picker)))
-        display(self.container)
+        display(HBox((self.container, self.picker)))
+        #display(self.container)
