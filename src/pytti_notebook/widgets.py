@@ -52,6 +52,7 @@ class Sketcher:
         self.init_canvas()
         self.init_picker()
         self.init_reset_button()
+        self.init_save_button()
         self.link()
 
     def link(self):
@@ -180,7 +181,11 @@ class Sketcher:
     def show(self):
         layout = HBox(
             (self.container, 
-             VBox((self.picker,self.reset_button))
+             VBox((
+                self.picker,
+                self.reset_button,
+                self.save_button,
+                ))
             )
         )
         display(layout)
