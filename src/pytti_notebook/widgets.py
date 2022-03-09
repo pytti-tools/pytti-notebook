@@ -35,7 +35,7 @@ class Sketcher:
         self.link()
 
     def link(self):
-        picker, canvas = self.picker, self.canvas
+        picker, canvas = self.picker, self.mask_canvas
         link((picker, "value"), (canvas, "stroke_style"))
         link((picker, "value"), (canvas, "fill_style"))
         return picker, canvas 
@@ -45,6 +45,14 @@ class Sketcher:
             description="Color:", 
             value=self.starting_color,
         )
+    @property
+    def mask_canvas(self):
+        #if not hasattr(self, 'canvas'):
+        #    self.init_canvas()
+        canvas = self.canvas
+        if isinstance(self.canvas, MultiCanvas):
+            canvas = self.canvas[-1]
+        return canvas
     
     def init_canvas(
         self,
@@ -56,9 +64,10 @@ class Sketcher:
 
         factory = self.factory       
         self.canvas = factory(width=width, height=height, sync_image_data=True)
-        canvas = self.canvas
-        if isinstance(self.canvas, MultiCanvas):
-            canvas = self.canvas[-1]
+        #canvas = self.canvas
+        #if isinstance(self.canvas, MultiCanvas):
+        #    canvas = self.canvas[-1]
+        canvas = self.mask_canvas
         canvas.on_mouse_down(self.on_mouse_down)
         canvas.on_mouse_move(self.on_mouse_move)
         canvas.on_mouse_up(self.on_mouse_up)
@@ -67,7 +76,7 @@ class Sketcher:
         self.drawing = False
         self.position = None
         self.shape = []
-        return self.canvas
+        return canvas
 
     def set_background(self, im):
         self.canvas[0] = im
@@ -81,18 +90,18 @@ class Sketcher:
     def on_mouse_move(self, x1, y1):
         if not self.drawing:
             return
-        with hold_canvas(self.canvas):
+        with hold_canvas(self.mask_canvas):
             x0, y0 = self.position
-            self.canvas.stroke_line(x0, y0, x1, y1)
+            self.mask_canvas.stroke_line(x0, y0, x1, y1)
             self.position = (x1, y1)
         self.shape.append(self.position)
 
     def on_mouse_up(self, x1, y1):
         self.drawing = False
-        with hold_canvas(self.canvas):
+        with hold_canvas(self.mask_canvas):
             x0, y0 = self.position
-            self.canvas.stroke_line(x0, y0, x1, y1)
-            self.canvas.fill_polygon(self.shape)
+            self.mask_canvas.stroke_line(x0, y0, x1, y1)
+            self.mask_canvas.fill_polygon(self.shape)
         self.shape = []
 
     def show(self):
