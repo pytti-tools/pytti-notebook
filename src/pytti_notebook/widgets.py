@@ -13,14 +13,22 @@ from IPython.display import display
 from ipywidgets import Image
 from ipywidgets import ColorPicker, IntSlider, link, AppLayout, HBox
 
-from ipycanvas import RoughCanvas, hold_canvas
+from ipycanvas import (
+  Canvas,
+  RoughCanvas, 
+  MultiRoughCanvas,
+  MultiCanvas,
+  hold_canvas,
+)
 
 
 class Sketcher:
     def __init__(
         self,
         starting_color="#749cb8",
+        factory=MultiRoughCanvas
     ):
+        self.factory=factory
         self.starting_color=starting_color
         self.init_canvas()
         self.init_picker()
@@ -44,9 +52,13 @@ class Sketcher:
         height = 400,
     ):
         self.width = width
-        self.height = height        
-        self.canvas = RoughCanvas(width=width, height=height, sync_image_data=True)
+        self.height = height 
 
+        factory = self.factory       
+        self.canvas = factory(width=width, height=height, sync_image_data=True)
+        canvas = self.canvas
+        if isinstance(self.canvas, MultiCanvas):
+            canvas = self.canvas[-1]
         self.canvas.on_mouse_down(self.on_mouse_down)
         self.canvas.on_mouse_move(self.on_mouse_move)
         self.canvas.on_mouse_up(self.on_mouse_up)
@@ -55,6 +67,10 @@ class Sketcher:
         self.drawing = False
         self.position = None
         self.shape = []
+        return self.canvas
+
+    def set_background(self, im):
+        self.canvas[0] = im
         return self.canvas
 
     def on_mouse_down(self, x, y):
