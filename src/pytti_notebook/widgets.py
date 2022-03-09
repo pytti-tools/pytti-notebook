@@ -112,13 +112,17 @@ class Sketcher:
         self.position = (x, y)
         self.shape = [self.position]
 
+        #self.mask_canvas.begin_path()
+        #self.mask_canvas.move_to(x ,y)
+
     def on_mouse_move(self, x1, y1):
         if not self.drawing:
             return
         with hold_canvas(self.container):
             x0, y0 = self.position
             self.mask_canvas.stroke_line(x0, y0, x1, y1)
-            self.position = (x1, y1)
+
+        self.position = (x1, y1)
         self.shape.append(self.position)
 
     def on_mouse_up(self, x1, y1):
