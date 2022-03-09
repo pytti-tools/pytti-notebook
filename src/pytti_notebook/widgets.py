@@ -64,11 +64,13 @@ class Sketcher:
         self.height = height 
 
         factory = self.factory       
-        self.canvas = factory(width=width, height=height, sync_image_data=True)
+        #self.canvas = factory(width=width, height=height, sync_image_data=True)
+        self.canvas = factory(width=width, height=height)
         #canvas = self.canvas
         #if isinstance(self.canvas, MultiCanvas):
         #    canvas = self.canvas[-1]
         canvas = self.mask_canvas
+        canvas.sync_image_data=True
         canvas.on_mouse_down(self.on_mouse_down)
         canvas.on_mouse_move(self.on_mouse_move)
         canvas.on_mouse_up(self.on_mouse_up)
