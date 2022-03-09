@@ -59,10 +59,10 @@ class Sketcher:
         canvas = self.canvas
         if isinstance(self.canvas, MultiCanvas):
             canvas = self.canvas[-1]
-        self.canvas.on_mouse_down(self.on_mouse_down)
-        self.canvas.on_mouse_move(self.on_mouse_move)
-        self.canvas.on_mouse_up(self.on_mouse_up)
-        self.canvas.stroke_style = self.starting_color # can I just link the picker here?
+        canvas.on_mouse_down(self.on_mouse_down)
+        canvas.on_mouse_move(self.on_mouse_move)
+        canvas.on_mouse_up(self.on_mouse_up)
+        canvas.stroke_style = self.starting_color # can I just link the picker here?
 
         self.drawing = False
         self.position = None
