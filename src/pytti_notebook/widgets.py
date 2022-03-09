@@ -84,9 +84,9 @@ class Sketcher:
         def _on_clicked(b):
             self.container.to_file("_mask_with_image.png")
             self.mask_canvas.to_file("_mask.png")
-            with open("mask_data.npy") as f:
+            with open("mask_data.npy", 'wb') as f:
                 self.mask_canvas.get_image_data().save(f)
-        self.reset_button.on_click(
+        self.save_button.on_click(
             _on_clicked
             )
 
