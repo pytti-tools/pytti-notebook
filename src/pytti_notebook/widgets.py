@@ -56,7 +56,6 @@ class Sketcher:
         picker, canvas = self.picker, self.mask_canvas
         link((picker, "value"), (canvas, "stroke_style"))
         link((picker, "value"), (canvas, "fill_style"))
-        self.reset_button.on_click(self.reset)
         return picker, canvas 
 
     def init_picker(self):
@@ -69,6 +68,11 @@ class Sketcher:
         self.reset_button = Button(
             description="Reset"
         )
+        def _on_clicked(b):
+            self.container.clear()
+        self.reset_button.on_click(
+            _on_clicked
+            )
 
     @property
     def mask_canvas(self): 
