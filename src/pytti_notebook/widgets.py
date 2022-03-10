@@ -108,9 +108,12 @@ class Sketcher:
             mask_pil = ImagePil.fromarray(mask_np)
             mask_pil = fix_transparency(mask_pil)
 
-            with open("mask_data.npy", 'wb') as f:
+            with open("_mask.png", 'wb') as f:
                 #np.save(f, self.mask_canvas.get_image_data())
                 mask_pil.save(f)
+            with open("mask_data.npy", 'wb') as f:
+                np.save(f, np.asarray(mask_pil))
+                
         self.save_button.on_click(
             _on_clicked
             )
