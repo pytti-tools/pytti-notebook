@@ -111,8 +111,8 @@ class Sketcher:
     def init_canvas(
         self,
     ):
-        self.width = width
-        self.height = height 
+        width = self.width
+        height = self.height 
         self.container = MultiCanvas(2, width=width, height=height, sync_image_data=True)
 
         self.mask_canvas.sync_image_data=True
