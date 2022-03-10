@@ -34,6 +34,14 @@ import numpy as np
 from PIL import Image as ImagePil
 
 
+def fix_transparency(
+    mask,
+    bgnd=(255, 255, 255, 1), # white
+):
+    img = ImagePil.new("RGBA", mask.size, bgnd)
+    img.alpha_composite(mask)
+    return img
+
 class Sketcher:
     """
     Run the following in the notebook prior to using this widget in colab:
@@ -95,9 +103,14 @@ class Sketcher:
         )
         def _on_clicked(b):
             self.container.to_file("_mask_with_image.png")
-            self.mask_canvas.to_file("_mask.png")
+            #self.mask_canvas.to_file("_mask.png")
+            mask_np = self.mask_canvas.get_image_data()
+            mask_pil = ImagePil.fromarray(mask_np)
+            mask_pil = fix_transparency(mask_pil)
+
             with open("mask_data.npy", 'wb') as f:
-                np.save(f, self.mask_canvas.get_image_data())
+                #np.save(f, self.mask_canvas.get_image_data())
+                mask_pil.save(f)
         self.save_button.on_click(
             _on_clicked
             )
