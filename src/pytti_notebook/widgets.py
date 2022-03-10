@@ -33,8 +33,6 @@ from ipywidgets import (
 import numpy as np
 from PIL import Image as ImagePil
 
-import time
-
 
 class Sketcher:
     """
@@ -59,8 +57,6 @@ class Sketcher:
             self.load_background(background_image)
         self.reset()
         if background_image:
-            # ugh...
-            time.sleep(2)
             self._set_background()
 
 
