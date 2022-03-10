@@ -31,6 +31,9 @@ from ipywidgets import (
 
 
 import numpy as np
+from PIL import Image as ImagePil
+
+
 
 class Sketcher:
     """
@@ -136,28 +139,34 @@ class Sketcher:
                 self._load_background_from_url(url=im)
         else:
             raise NotImplementedError
-        img = self._bgnd_im 
-        self.height, self.width = img.height, img.width
+        #img = self._bgnd_im 
+        #self.height, self.width = img.height, img.width
 
     def set_background(self, im):
         self.load_background(im)
         self._set_background()
 
     def _set_background(self, im=None):
-        if not im:
-            im = self._bgnd_im
-        self.bgnd_canvas.draw_image(im, 0,0)
-        self._bgnd_im = im
+        #if not im:
+        #    #im = self._bgnd_im
+        #self.bgnd_canvas.draw_image(im, 0,0)
+        #self._bgnd_im = im
+        self.bgnd_canvas.put_image_data.draw_image(self._bgnd_im_np, 0,0)
 
     def _load_background_from_fpath(self, fpath):
         """sets background image given path to image file"""
-        im = ImageIpyw.from_file(fpath)
-        self._bgnd_im = im
+        #im = ImageIpyw.from_file(fpath)
+        #im_pil = Image
+        with ImagePil.open(fpath) as im:
+            self._bgnd_im_pil = im
+            self._bgnd_im_np = np.asarray(im)
+            self.width, self.height = self._bgnd_im_np.size
 
     def _load_background_from_url(self, url):
         """sets background image given path to image file"""
-        im = ImageIpyw.from_url(url)
-        self._bgnd_im = im
+        raise NotImplementedError
+        #im = ImageIpyw.from_url(url)
+        #self._bgnd_im = im
 
 
     def on_mouse_down(self, x, y):
