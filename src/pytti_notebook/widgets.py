@@ -151,7 +151,7 @@ class Sketcher:
         #    #im = self._bgnd_im
         #self.bgnd_canvas.draw_image(im, 0,0)
         #self._bgnd_im = im
-        self.bgnd_canvas.put_image_data.draw_image(self._bgnd_im_np, 0,0)
+        self.bgnd_canvas.put_image_data(self._bgnd_im_np, 0,0)
 
     def _load_background_from_fpath(self, fpath):
         """sets background image given path to image file"""
