@@ -159,8 +159,9 @@ class Sketcher:
         #im_pil = Image
         with ImagePil.open(fpath) as im:
             self._bgnd_im_pil = im
+            self.width, self.height = self._bgnd_im_pil.size
             self._bgnd_im_np = np.asarray(im)
-            self.width, self.height = self._bgnd_im_np.size
+            
 
     def _load_background_from_url(self, url):
         """sets background image given path to image file"""
