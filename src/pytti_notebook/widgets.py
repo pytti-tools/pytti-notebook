@@ -42,10 +42,21 @@ class Sketcher:
     """
     def __init__(
         self,
-        starting_color="#749cb8",
+        background_image=None,
+        starting_color="#000000",
+        # defaults to be overriden after/if background image provided
+        width = 400,
+        height = 400,
     ):
+        self.width = width
+        self.height = height
         self.starting_color=starting_color
+        if background_image:
+            self.load_background(background_image)
         self.reset()
+        if background_image:
+            self._set_background()
+
 
     def reset(self):
         self.init_canvas()
@@ -99,8 +110,6 @@ class Sketcher:
 
     def init_canvas(
         self,
-        width = 400,
-        height = 400,
     ):
         self.width = width
         self.height = height 
@@ -119,27 +128,36 @@ class Sketcher:
         self.poly = []
         return self.container
 
-    def set_background(self, im):
+    def load_background(self, im):
         if isinstance(im, str):
             try:
-                self._set_background_from_fpath(fpath=im)
+                self._load_background_from_fpath(fpath=im)
             except FileNotFoundError:
-                self._set_background_from_url(url=im)
+                self._load_background_from_url(url=im)
         else:
             raise NotImplementedError
+        img = self._bgnd_im 
+        self.height, self.width = img.height, img.width
 
-    def _set_background(self, im):
+    def set_background(self, im):
+        self.load_background(im)
+        self._set_background()
+
+    def _set_background(self, im=None):
+        if not im:
+            im = self._bgnd_im
         self.bgnd_canvas.draw_image(im, 0,0)
+        self._bgnd_im = im
 
-    def _set_background_from_fpath(self, fpath):
+    def _load_background_from_fpath(self, fpath):
         """sets background image given path to image file"""
         im = ImageIpyw.from_file(fpath)
-        self._set_background(im)
+        self._bgnd_im = im
 
-    def _set_background_from_url(self, url):
+    def _load_background_from_url(self, url):
         """sets background image given path to image file"""
         im = ImageIpyw.from_url(url)
-        self._set_background(im)
+        self._bgnd_im = im
 
 
     def on_mouse_down(self, x, y):
